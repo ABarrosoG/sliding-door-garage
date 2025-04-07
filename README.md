@@ -9,6 +9,19 @@
    - La placa optoacoplada de tres reles que he utilizado es esta https://s.click.aliexpress.com/e/_oFawcp3
    - La fuente de alimentación 220v AC a 5v DC es esta https://s.click.aliexpress.com/e/_oFyz5GN
    - He utilizado un conector de 3 pines y el resto son de 2 pines, los conectores son estos https://s.click.aliexpress.com/e/_oph4j1X
+     
+## Imagen genérica del panel de control.
+![Fotografía genérica del panel de control](https://github.com/ABarrosoG/sliding-door-garage/blob/main/fot-panel.jpg)
+## Imagen detallada del panel de control.
+![Fotografía detallada del panel de control](https://github.com/ABarrosoG/sliding-door-garage/blob/main/fot-pcb.jpg)
+## Imagen de la pantalla de android auto con un botón para abrir la puerta de garaje, integrado con Homeassistant.
+![Fotografía de la pantalla de android auto en el vehículo.](https://github.com/ABarrosoG/sliding-door-garage/blob/main/fot-pcb.jpg)
+
+Tareas por desarrollar:
+- [x] Incluir barrera de infrarojos para prevenir accidentes.
+- [x] Incluir destellos led para avisar a los viandantes u otros vehículos de salidas de vehículos.
+- [ ] Incluir entrada para que la puerta abra parcialmente para acceso de personas.
+
 
      > [!WARNING]
      > UTILICE EL CÓDIGO Y SUS RECURSOS CON SUMO CIUDADO, EXISTE RIESGO DE ELECTROCUCIÓN O DESCARGAS ELECTRICAS EN LA MANIPULACIÓN DE COMPONENTES ELÉCTRICOS, EXISTEN RIESGOS DE ATRAPAMIENTO O ESTRANGULAMIENTO EN EL ACCIONAMIENTO DEL MOTOR. TODO LO QUE USTED REALICE SERÁ BAJO SU PROPIA RESPONSABILIDAD, INCLUIDO EL MANEJO DE ESTE CÓDIGO FUENTE.
