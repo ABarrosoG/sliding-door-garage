@@ -10,6 +10,9 @@
    La placa optoacoplada de tres reles que he utilizado es esta https://s.click.aliexpress.com/e/_oFawcp3
    La fuente de alimentación 220v AC a 5v DC es esta https://s.click.aliexpress.com/e/_oFyz5GN
    He utilizado un conector de 3 pines y el resto son de 2 pines, los conectores son estos https://s.click.aliexpress.com/e/_oph4j1X
+
+   https://github.com/ABarrosoG/sliding-door-garage/tree/main
+
 *********************************************************************/
 //   Librerias
 #include <SPI.h>
