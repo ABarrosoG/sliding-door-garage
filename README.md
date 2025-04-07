@@ -9,6 +9,8 @@
    - La placa optoacoplada de tres reles que he utilizado es esta https://s.click.aliexpress.com/e/_oFawcp3
    - La fuente de alimentación 220v AC a 5v DC es esta https://s.click.aliexpress.com/e/_oFyz5GN
    - He utilizado un conector de 3 pines y el resto son de 2 pines, los conectores son estos https://s.click.aliexpress.com/e/_oph4j1X
+   - ¿porqué he utilizado un arduino nano en vez de una placa con wifi? Porque al lugar de la puerta no me llega el wifi pero si me llega la red Zigbee, lo tengo integrado con homeassistant con esa red.
+   - Es facil y está comentado el código para poder cambiarlo por otra placa de desarrollo, bien una esp8266 o esp32.
 
 
      
