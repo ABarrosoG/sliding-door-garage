@@ -20,12 +20,12 @@ Aquí un simple control de flujo:
 
 ```mermaid
 graph TD;
-    Click Mando-->Abre puerta;
-    Click Mando-->Cierra puerta;
-    Abre puerta-->D;
-    Cierra puerta-->D;
-    Puerta cerrada;
-    Puerta cerrada;
+    Click_Mando-->Abre_puerta;
+    Click_Mando-->Cierra_puerta;
+    Abre_puerta-->D;
+    Cierra_puerta-->D;
+    Puerta_cerrada;
+    Puerta_cerrada;
 ```
      
 ## Imagen genérica del panel de control.
