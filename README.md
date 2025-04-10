@@ -20,15 +20,13 @@ Aquí un simple control de flujo:
 
 ```mermaid
 graph TD;
-    Click_Mando-->Abre_puerta;
+    Click_mando-->Abre_puerta-->Puerta_abierta-->Pausa_X_tiempo_abierta-->Cierra_puerta;
     Abre_puerta-->Puerta_abierta;
-    Click_Mando-->Cierra_puerta;
-    Cierra_puerta-->Célula_Fotoeléctrica_detecta_obstaculo;
+    Click_mando-->Cierra_puerta;
+    Cierra_puerta-->Si_célula_fotoeléctrica_detecta_obstáculo-->Abre_puerta;
     Cierra_puerta-->Puerta_cerrada;
     
-    Cierra_puerta-->Puerta_cerrada;
-    Puerta_cerrada;
-    Puerta_abierta;
+
 ```
      
 ## Imagen genérica del panel de control.
