@@ -20,9 +20,8 @@ Aquí un simple control de flujo:
 
 ```mermaid
 flowchart TD
-    A(["Click mando a distancia"]) --> n3["si puerta cerrada"] & n4["si puerta abierta"]
     Puerta_cerrada-->Click_mando-->Abriendo_puerta-->Si_click_mando-->Parada_de_puerta-->Pausa_X_tiempo_abierta-->Cerrando_puerta-->Puerta_cerrada;
-    Puerta_cerrada-->Click_mando-->Abriendo_puerta-->Si_click_mando-->Parada_de_puerta-->Si_click_mando-->Cerrando_puerta-->Puerta_cerrada;
+    Puerta_cerrada-->Click_mando-->Abriendo_puerta-->Si_click_mando-->Parada_de_puerta-->Si_click_mando-->;
     Puerta_abierta-->Click_mando-->Cerrando_puerta-->Puerta_cerrada;
     Puerta_abierta-->Pausa_X_tiempo_abierta-->Cerrando_puerta-->Puerta_cerrada;
     Cerrando_puerta-->Si_célula_fotoeléctrica_detecta_obstáculo-->Abriendo_puerta-->Puerta_abierta;
