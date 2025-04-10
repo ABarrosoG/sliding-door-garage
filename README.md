@@ -19,8 +19,8 @@
 Aquí un simple control de flujo:
 
 ```mermaid
-graph TD;
-A(["Click mando a distancia"]) --> n3["si puerta cerrada"] & n4["si puerta abierta"]
+flowchart TD
+    A(["Click mando a distancia"]) --> n3["si puerta cerrada"] & n4["si puerta abierta"]
     Puerta_cerrada-->Click_mando-->Abriendo_puerta-->Si_click_mando-->Parada_de_puerta-->Pausa_X_tiempo_abierta-->Cerrando_puerta-->Puerta_cerrada;
     Puerta_cerrada-->Click_mando-->Abriendo_puerta-->Si_click_mando-->Parada_de_puerta-->Si_click_mando-->Cerrando_puerta-->Puerta_cerrada;
     Puerta_abierta-->Click_mando-->Cerrando_puerta-->Puerta_cerrada;
