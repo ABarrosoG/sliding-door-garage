@@ -12,7 +12,7 @@
    He utilizado un conector de 3 pines y el resto son de 2 pines, los conectores son estos https://s.click.aliexpress.com/e/_oph4j1X
 
    https://github.com/ABarrosoG/sliding-door-garage/tree/main
-
+   
 *********************************************************************/
 //   Librerias
 #include <SPI.h>
@@ -31,7 +31,7 @@ const int MOTOR_ABRIR = 6;  //Relay 2
 const int FCCER = 7;
 //const int MandoZigbee = 4; //utilizo la misma entrada que RF
 const int MOTOR_CERRAR = 12;  //Relay   3
-const int MandoRPerson = A3;  //D17 ó A3 (por implementar) cuando reciba señal por aquí, la puerta se abrirá parcialmente para el acceso de personas.
+//const int MandoRPerson = A3;  //D17 ó A3 (por implementar) cuando reciba señal por aquí, la puerta se abrirá parcialmente para el acceso de personas.
 
 
 // Definiendo pins para pantalla SH1106 de 7 pines:
@@ -49,22 +49,17 @@ Adafruit_SH1106 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 
 
 // Definiendo variables globales
-unsigned long TIEMPO_PUERTA_ABIERTA = 30000;  // Tiempo de puerta abierta en milisegundos para entrada o salida de vehículo
-unsigned long TIEMPO_MAX_RECORRIDO = 600000;   // Tiempo máximo de apertura o cierre para marcar averia (60000 10 minutos)
+unsigned long TIEMPO_PUERTA_ABIERTA_VEHICULO = 20000;  // Tiempo de puerta abierta en milisegundos para entrada o salida de vehículo
 unsigned long BLINK_LUZ = 1000;        // Ciclo en milisegundos RELAY_LIGHT señalizacion
-unsigned long BLINK_LUZ_AVERIA = 500;  // Ciclo RELAY_LIGHT señalizacion
 int ledState = LOW;                 // ledState used to set the LED
 unsigned long currentMillis = millis();
-unsigned long previousMillisblink = millis();   // Tracks the time since last event fired
-unsigned long previousMillisaveria = millis();   // Tracks the time since last event fired
-unsigned long previousMillispausa = millis();   // Tracks the time since last event fired
-boolean AVERIA = false;         //Excedido el TIEMPO de recorrer sin detectar finales de carrera
+unsigned long previousMillisblink = millis();   // 
+unsigned long previousMillispausa = millis();   // 
 boolean PuertaAbierta = false;  //true abierta, false cerrada
 
 void setup() {
   Serial.begin(9600);
   // Inicializando los pines
-  pinMode(MandoRPerson, INPUT_PULLUP);
   pinMode(FOTOCELULA, INPUT_PULLUP);
   pinMode(MandoRF, INPUT_PULLUP);
   pinMode(FCCER, INPUT_PULLUP);  //FC HIGH=NO DETECTADO Y LOW=DETECTADO
@@ -88,7 +83,7 @@ void setup() {
   // Para SSD1306 descomentar utiliza: 
   //display.begin(SSD1306_SWITCHCAPVCC);
   display.display();  // Muestra pantalla inicial de Adafruit
-  delay(1000);
+  delay(500);
   display.clearDisplay();
   display.display();
   // prepara el display para texto
@@ -99,23 +94,19 @@ void setup() {
 // ==============( Void Loop  ) =========
 void loop() {
   mandoDistancia();
-  LuzAveria();
-  currentMillis = millis();
-  if ( ((unsigned long)(currentMillis - previousMillispausa) > TIEMPO_PUERTA_ABIERTA) && (PuertaAbierta == true) ) {
-    previousMillispausa = currentMillis;
-    cierraPuerta();
-  }
-  //inicio blink normal
-    currentMillis = millis();
-    if ( ((unsigned long)(currentMillis - previousMillisblink) > (BLINK_LUZ/2)) && (PuertaAbierta == true) ){
-      previousMillisblink = currentMillis;
+  if( ((millis()- previousMillispausa) >= TIEMPO_PUERTA_ABIERTA_VEHICULO) && (PuertaAbierta == true) ){     
+      //previousMillispausa=millis();
+      cierraPuerta();
+    }
+  if( ((millis()- previousMillisblink) >= (BLINK_LUZ/2)) && (PuertaAbierta == true) ){     
+      previousMillisblink=millis();
       if (ledState == LOW) {
         ledState = HIGH;
       } else {
         ledState = LOW;
       }
       digitalWrite(RELAY_LIGHT, ledState);
-    }//fin blink normal
+    }
 
   display.clearDisplay();
   display.setTextSize(1);
@@ -132,24 +123,24 @@ void loop() {
   display.println(digitalRead(FCABI));
   display.print("Mando: ");
   display.println(digitalRead(MandoRF));
-  display.print("Averia: ");
-  display.println(AVERIA);
   display.display();
 }
+
 // ========{ Mando distancia }==================
 void mandoDistancia() {
   if ((digitalRead(MandoRF) == LOW) && (PuertaAbierta == false)) {
-    //Serial.println("Mando abre");
+    //Serial.println("Mando vehículo abre");
     abrePuerta();
-    delay(2000);
+    delay(1000);
   }
   if ((digitalRead(MandoRF) == LOW) && (PuertaAbierta == true)) {
-    //Serial.println("Mando cierra");
+    //Serial.println("Mando vehículo cierra");
     cierraPuerta();
-    delay(2000);
+    delay(1000);
   }
 }
-// ========{ abre Puerta }==================
+
+// ========{ abre Puerta vehículo }==================
 void abrePuerta() {
   PuertaAbierta = true;
   digitalWrite(MOTOR_ABRIR, HIGH);
@@ -157,9 +148,8 @@ void abrePuerta() {
   while ((digitalRead(FCABI) == HIGH)) {  // LOW DETECTA EL FINAL DE CARRERA DE APERTURA
     digitalWrite(MOTOR_ABRIR, HIGH);
     //inicio blink
-    currentMillis = millis();
-    if ( ((unsigned long)(currentMillis - previousMillisblink) > BLINK_LUZ)  ){
-      previousMillisblink = currentMillis;
+    if( ((millis()- previousMillisblink) >= (BLINK_LUZ)) ){     
+      previousMillisblink=millis();
       if (ledState == LOW) {
         ledState = HIGH;
       } else {
@@ -167,7 +157,13 @@ void abrePuerta() {
       }
       digitalWrite(RELAY_LIGHT, ledState);
     }//fin blink 
+    if ((digitalRead(MandoRF) == LOW)) { //pulso de mando RF, stop puerta.
+      digitalWrite(MOTOR_ABRIR, LOW);
+      delay(1000);
+      goto exit;
+    }
   }
+  
   digitalWrite(MOTOR_ABRIR, LOW);  //stop motor
   delay(500);
   display.clearDisplay();
@@ -185,26 +181,22 @@ void abrePuerta() {
   display.println(digitalRead(FCABI));
   display.print("Mando: ");
   display.println(digitalRead(MandoRF));
-  display.print("Averia: ");
-  display.println(AVERIA);
   display.display();
-  //inicio avería, si el tiempo excede del marcado indica averia, para el motor y hará el parpadeo de avería.
-  if ((unsigned long)(currentMillis - previousMillisaveria) > TIEMPO_MAX_RECORRIDO){ 
-    previousMillisaveria = currentMillis;
-    AVERIA = true;
-    LuzAveria();
-    } 
+  previousMillispausa=millis(); //comienza a contar el tiempo de pausa
+  
+exit:
+  previousMillispausa=millis(); //comienza a contar el tiempo de pausa
+  loop();
 }
-// ========{ cierra Puerta  }==================
+// ========{ cierra Puerta vehículo  }==================
 void cierraPuerta() {
   digitalWrite(MOTOR_CERRAR, HIGH);  // Activa motor de cierre
   delay(1000);
   while ((digitalRead(FCCER) == HIGH)) {  // LOW DETECTA EL FINAL DE CARRERA DE APERTURA
     digitalWrite(MOTOR_CERRAR, HIGH);     // Activa motor de cierre
     //inicio blink
-    currentMillis = millis();
-    if ( ((unsigned long)(currentMillis - previousMillisblink) > BLINK_LUZ)  ){
-      previousMillisblink = currentMillis;
+    if( ((millis()- previousMillisblink) >= (BLINK_LUZ)) ){     
+      previousMillisblink=millis();
       if (ledState == LOW) {
         ledState = HIGH;
       } else {
@@ -212,13 +204,20 @@ void cierraPuerta() {
       }
       digitalWrite(RELAY_LIGHT, ledState);
     }//fin blink 
-    if ((digitalRead(FOTOCELULA) == HIGH) || (digitalRead(MandoRF) == LOW)) { //detecta obstaculo o pulso de mando RF
+    if ((digitalRead(FOTOCELULA) == HIGH)) { //detecta obstaculo, stop puerta y abre puerta.
       digitalWrite(MOTOR_CERRAR, LOW);
       delay(1000);
       PuertaAbierta = true;
       abrePuerta();
       goto exit;
     }
+    /*if ((digitalRead(MandoRF) == LOW)) { //pulso de mando RF, stop puerta.
+      digitalWrite(MOTOR_CERRAR, HIGH);
+      //delay(1000);
+      PuertaAbierta = true;
+      //abrePuerta();
+      goto exit;
+    }*/
   }
   delay(350);                       // Retrasa el cierre unos milisegundos OJO, esto es opcional, en mi caso lo tengo así para que quede bien cerrada.
   digitalWrite(MOTOR_CERRAR, LOW);  //stop motor
@@ -240,38 +239,8 @@ void cierraPuerta() {
   display.println(digitalRead(FCABI));
   display.print("Mando: ");
   display.println(digitalRead(MandoRF));
-  display.print("Averia: ");
-  display.println(AVERIA);
   display.display();
-  //inicio avería, si el tiempo excede del marcado indica averia, para el motor y hará el parpadeo de avería.
-  if ((unsigned long)(currentMillis - previousMillisaveria) > TIEMPO_MAX_RECORRIDO){ 
-    previousMillisaveria = currentMillis;
-    AVERIA = true;
-    LuzAveria();
-    } 
-  //final averia
+
 exit:
   loop();
 }
-
-
-void LuzAveria() { //blink, parpadeo en la luz de avería 
-  while (AVERIA == true) {
-    digitalWrite(MOTOR_CERRAR, LOW);
-    digitalWrite(MOTOR_ABRIR, LOW);
-    currentMillis = millis();
-    if ((unsigned long)(currentMillis - previousMillisaveria) > BLINK_LUZ_AVERIA) {
-      previousMillisaveria = currentMillis;
-      if (ledState == LOW) {
-        ledState = HIGH;
-      } else {
-        ledState = LOW;
-      }
-      digitalWrite(RELAY_LIGHT, ledState);
-    }
-  }
-}
-
-
-
-
