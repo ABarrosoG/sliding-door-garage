@@ -11,8 +11,22 @@
    - He utilizado un conector de 3 pines y el resto son de 2 pines, los conectores son estos https://s.click.aliexpress.com/e/_oph4j1X
    - ¿porqué he utilizado un arduino nano en vez de una placa con wifi? Porque al lugar de la puerta no me llega el wifi pero si me llega la red Zigbee, lo tengo integrado con homeassistant con esa red.
    - Es facil y está comentado el código para poder cambiarlo por otra placa de desarrollo, bien una esp8266 o esp32.
+   - Modo persona se ha implementado de la siguiente forma:
+     - Click al mando y la puerta comienza a abrir.
+     - Cuando alcanza la apertura que usted requiera, vuelva a realizar click y la puerta hará stop.
+     - Cuando transcurra el tiempo establecido de pausa, automáticamente se cerrará, también puede cerrarla sin demorar haciendo click en el mando.
 
+Aquí un simple control de flujo:
 
+```mermaid
+graph TD;
+    Click Mando-->Abre puerta;
+    Click Mando-->Cierra puerta;
+    Abre puerta-->D;
+    Cierra puerta-->D;
+    Puerta cerrada;
+    Puerta cerrada;
+```
      
 ## Imagen genérica del panel de control.
 ![Fotografía genérica del panel de control](https://github.com/ABarrosoG/sliding-door-garage/blob/main/fot-panel.jpg)
@@ -28,7 +42,8 @@ Tareas por desarrollar:
 - [x] Incluir barrera de infrarojos para prevenir accidentes.
 - [x] Incluir destellos led para avisar a los viandantes u otros vehículos de salidas de vehículos.
 - [x] Integrable con dos tipos de pantalla OLED, la SSD1306 de 4 pines y la sh1106 de 7 pines.
-- [ ] - [ ] Incluir entrada para que la puerta abra parcialmente para acceso de personas.
+- [x] Incluir entrada para que la puerta abra parcialmente para acceso de personas.
+- [ ] Se aceptan mejoras de código o por implementar.
 
 
 
