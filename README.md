@@ -33,7 +33,7 @@ flowchart TD
 ## Imagen detallada del panel de control.
 ![Fotografía detallada del panel de control](https://github.com/ABarrosoG/sliding-door-garage/blob/main/fot-pcb.jpg)
 ## Imagen de la pantalla de android auto con un botón para abrir la puerta de garaje, integrado con Homeassistant.
-![Fotografía de la pantalla de android auto en el vehículo.](https://github.com/ABarrosoG/sliding-door-garage/blob/main/fot-pcb.jpg)
+![Fotografía de la pantalla de android auto en el vehículo.](https://github.com/ABarrosoG/sliding-door-garage/blob/main/fot-android%20auto.jpg)
 
 
 
